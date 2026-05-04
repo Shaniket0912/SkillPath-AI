@@ -79,7 +79,12 @@ Rules:
         name: s.name || 'Skill',
         level: ['beginner', 'intermediate', 'advanced'].includes(s.level) ? s.level : 'beginner',
         description: s.description || '',
-        resources: Array.isArray(s.resources) ? s.resources : [],
+        resources: Array.isArray(s.resources) ? s.resources.map(r => ({
+  ...r,
+  type: ['youtube', 'article', 'course', 'book', 'other'].includes(r.type) 
+    ? r.type 
+    : 'other'
+})) : [],
         isKnown: false,
         isLearned: false,
       })),
