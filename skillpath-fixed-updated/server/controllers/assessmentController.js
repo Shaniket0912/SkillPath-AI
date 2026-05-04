@@ -89,7 +89,12 @@ Rules:
 - Make questions relevant to a fresher level`;
 
     const data = await callGemini(prompt);
-    const questions = (data.questions || []).slice(0, 20);
+    const questions = (data.questions || []).slice(0, 20).map(q => ({
+  ...q,
+  correctAnswer: q.correctAnswer || q.options?.[0] || 'N/A',
+  type: ['mcq', 'scenario', 'code-reading'].includes(q.type) ? q.type : 'mcq',
+  difficulty: ['easy', 'medium', 'hard'].includes(q.difficulty) ? q.difficulty : 'medium',
+}));
 
     if (questions.length === 0) throw new Error('No questions generated');
 
